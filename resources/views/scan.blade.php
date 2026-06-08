@@ -82,16 +82,65 @@ async function startNfc()
         </div>
         `;
 
-        ndef.onreading = ({ serialNumber }) =>
-        {
-            hasil.innerHTML =
-            `
-            <div class="alert alert-success">
-                UID Kartu:<br>
-                <strong>${serialNumber}</strong>
-            </div>
-            `;
-        };
+        ndef.onreading = async ({ serialNumber }) =>
+{
+    hasil.innerHTML =
+    `
+    <div class="alert alert-info">
+        Mengirim absensi...
+    </div>
+    `;
+
+    const response = await fetch('/scan', {
+
+        method: 'POST',
+
+        headers: {
+
+            'Content-Type': 'application/json',
+
+            'X-CSRF-TOKEN':
+                '{{ csrf_token() }}'
+
+        },
+
+        body: JSON.stringify({
+
+            serial: serialNumber
+
+        })
+
+    });
+
+    const data = await response.json();
+
+    if(data.status)
+    {
+        hasil.innerHTML =
+        `
+        <div class="alert alert-success">
+
+            Absensi Berhasil<br>
+
+            <strong>${data.nama}</strong><br>
+
+            ${data.nim}
+
+        </div>
+        `;
+    }
+    else
+    {
+        hasil.innerHTML =
+        `
+        <div class="alert alert-danger">
+
+            ${data.message}
+
+        </div>
+        `;
+    }
+};
 
     }
     catch(error)

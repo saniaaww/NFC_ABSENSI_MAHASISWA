@@ -43,12 +43,9 @@
 
                     <input
                         type="text"
-                        id="serial_nfc"
                         name="serial_nfc"
                         class="form-control"
-                        readonly
                         required>
-
                 </div>
 
                 <div class="mb-3">
