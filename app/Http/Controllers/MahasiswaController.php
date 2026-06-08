@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Mahasiswa;
+
+class MahasiswaController extends Controller
+{
+    public function index()
+    {
+        $mahasiswa = Mahasiswa::latest()->get();
+
+        return view(
+            'mahasiswa.index',
+            compact('mahasiswa')
+        );
+    }
+
+    public function create()
+    {
+        return view('mahasiswa.create');
+    }
+
+    public function store(Request $request)
+    {
+        Mahasiswa::create([
+
+            'nim' => $request->nim,
+
+            'nama' => $request->nama,
+
+            'serial_nfc' => $request->serial_nfc
+
+        ]);
+
+        return redirect('/mahasiswa');
+    }
+
+    public function edit($id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        return view(
+            'mahasiswa.edit',
+            compact('mahasiswa')
+        );
+    }
+
+    public function update(
+        Request $request,
+        $id
+    )
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        $mahasiswa->update([
+
+            'nim' => $request->nim,
+
+            'nama' => $request->nama,
+
+            'serial_nfc' => $request->serial_nfc
+
+        ]);
+
+        return redirect('/mahasiswa');
+    }
+
+    public function destroy($id)
+    {
+        Mahasiswa::destroy($id);
+
+        return back();
+    }
+}
